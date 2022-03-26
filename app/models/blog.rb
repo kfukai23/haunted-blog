@@ -6,6 +6,7 @@ class Blog < ApplicationRecord
   has_many :liking_users, class_name: 'User', source: :user, through: :likings
 
   validates :title, :content, presence: true
+  before_save :ensure_eyecatch_used_by_only_premium_user
 
   scope :published, -> { where('secret = FALSE') }
 
@@ -17,5 +18,11 @@ class Blog < ApplicationRecord
 
   def owned_by?(target_user)
     user == target_user
+  end
+
+  private
+
+  def ensure_eyecatch_used_by_only_premium_user
+    self.random_eyecatch = false if !user.premium?
   end
 end
