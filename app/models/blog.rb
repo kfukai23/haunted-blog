@@ -22,7 +22,8 @@ class Blog < ApplicationRecord
 
   private
 
+  # NOTE: 非 premium ユーザに対しては controller で random_eyecatch を受け付けないようにしているが、万一に備える
   def ensure_eyecatch_used_by_only_premium_user
-    self.random_eyecatch = false if !user.premium?
+    self.random_eyecatch = false unless user.premium?
   end
 end
